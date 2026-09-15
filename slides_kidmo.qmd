@@ -43,7 +43,7 @@ Clinical prediction models play a vital role in advancing **personalized medicin
 
 ## Swiss transplant centers
 
-![](centers.png){width=100%}
+![](centers.png){width=90%}
 
 ## Methods
 
@@ -144,7 +144,7 @@ Probability of an event by time *t* (with 95% confidence bands).
 
 ## Full model {.smaller}
 
-![](full_model.png){width=83%}
+![](full_model.png){width=90%}
 
 * 15 predictor variables altogether
   * not included: recipient DSA, recipient time on dialysis (missing data)
@@ -171,14 +171,14 @@ Not all predictors are *statistically significant* and that is okey.
 
 ## Partial effects
 
-![Partial effects of the continuous variables (B) donor age, (C) recipient age, and (D) transplantation year on the graft loss rate.](partial_effects.png){width=100%}
+![Partial effects of the continuous variables (B) donor age, (C) recipient age, and (D) transplantation year on the graft loss rate.](partial_effects.png){width=90%}
 
 * Reveals important relationship with outcome
 * Does it make sense, clinically?
 
 ## Performance measures
 
-![](performance.png){width=100%}
+![](performance.png){width=90%}
 
 * Modest discrimination
 * Good calibration
@@ -200,7 +200,7 @@ where $S_{0}(t)$ denotes the baseline survival function. Baseline survival value
 
 The term $\mathrm{e}^{X\beta}$ is the individual-specific subdistribution hazard ratio derived from the linear predictor $X\hat{\beta}$ shown below.
 
-![](Xb.png){width=100%}
+![](Xb.png){width=90%}
 
 ## Absolute risks {.smaller}
 
@@ -231,7 +231,7 @@ The KIDMO risk score has been implemented in the Swisstransplant R package `swt`
 remotes::install_github("Swisstransplant/swt")
 ```
 
-![](hex-swt.png){width=100%}
+![](hex-swt.png){width=90%}
 
 
 ## `kidmo()` function
@@ -359,7 +359,7 @@ legend("topright", legend = c("85 years", "65 years",
 
 ::: {.column width="50%"}
 
-![](riskcalc.png){width=100%}
+![](riskcalc.png){width=90%}
 :::
 
 ::: {.column width="50%"}
