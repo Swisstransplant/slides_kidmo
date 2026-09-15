@@ -341,38 +341,53 @@ Simon Schwab
 </div>
 </div></div>
 </section>
-<section id="full-model" class="slide level2">
+<section id="full-model" class="slide level2 smaller">
 <h2>Full model</h2>
 
 <img data-src="full_model.png" style="width:83.0%" class="r-stretch"><ul>
-<li>15 Predictor variables altogether</li>
-<li>[–recipient DSA, –recipient time on dialysis]</li>
-<li>[+transplant year]</li>
+<li>15 predictor variables altogether
+<ul>
+<li>not included: recipient DSA, recipient time on dialysis (missing data)</li>
+<li>additionally included: transplant year</li>
+</ul></li>
 </ul>
 </section>
 <section id="variable-selection" class="slide level2">
 <h2>Variable selection</h2>
 <ul>
-<li>Backward elimination with AIC (<em>p</em>≈0.157) across 1,000 bootstrap samples<sup>1</sup></li>
-<li>Selection criterion: variables contained in at least 50% of the reduced models</li>
+<li>Backward elimination with AIC (<em>p</em>≈0.157) across 1,000 bootstraps<sup>1</sup></li>
+<li>Selection criterion: variables contained in at least 50% of the time</li>
 </ul>
 <p>→ Entire model-building process was repeated within each bootstrap</p>
 <h3 id="final-model">Final model</h3>
 <ul>
-<li>7 variables</li>
+<li>7 variables
+<ul>
 <li>4 donor variables</li>
 <li>3 recipient variables</li>
+</ul></li>
 </ul>
 <aside><ol class="aside-footnotes"><li id="fn3"><p>Heinze &amp; Dunkler, 2017, <em>Transpl Int</em></p></li></ol></aside></section>
 <section id="final-model-1" class="slide level2">
 <h2>Final model</h2>
 
-<img data-src="final_model.png" style="width:90.0%" class="r-stretch"><p>Not all predictors are <em>statistically significant</em> and that is okey!</p>
+<img data-src="final_model.png" style="width:90.0%" class="r-stretch"><p>Not all predictors are <em>statistically significant</em> and that is okey.</p>
 </section>
 <section id="partial-effects" class="slide level2">
 <h2>Partial effects</h2>
 
-<img data-src="partial_effects.png" style="width:100.0%" class="r-stretch"><p>Partial effects of the continuous variables (B) donor age, (C) recipient age, and (D) transplantation year on the graft loss rate.</p>
+<img data-src="partial_effects.png" style="width:100.0%" class="r-stretch quarto-figure-center"><p class="caption">Partial effects of the continuous variables (B) donor age, (C) recipient age, and (D) transplantation year on the graft loss rate.</p><ul>
+<li>Reveals important relationship with outcome</li>
+<li>Does it make sense, clinically?</li>
+</ul>
+</section>
+<section id="performance-measures" class="slide level2">
+<h2>Performance measures</h2>
+
+<img data-src="performance.png" style="width:100.0%" class="r-stretch"><ul>
+<li>Modest discrimination</li>
+<li>Good calibration</li>
+</ul>
 </section>
 <section id="model-equation" class="slide level2">
 <h2>Model equation</h2>
@@ -403,7 +418,7 @@ Simon Schwab
 <p>The term <span class="math inline">\(\mathrm{e}^{X\beta}\)</span> is the individual-specific subdistribution hazard ratio derived from the linear predictor <span class="math inline">\(X\hat{\beta}\)</span> shown below.</p>
 
 <img data-src="Xb.png" style="width:100.0%" class="r-stretch"></section>
-<section id="absolute-risks" class="slide level2">
+<section id="absolute-risks" class="slide level2 smaller">
 <h2>Absolute risks</h2>
 <p>The cumulative incidence, i.e., the probability of graft loss by time <span class="math inline">\(t\)</span> for an individual with covariates <span class="math inline">\(X\)</span>, is</p>
 <p><span class="math display">\[
@@ -453,6 +468,9 @@ Summary:
 1  1.46  75%  0.05279943   0.1003058</code></pre>
 </div>
 </div>
+<ul>
+<li>Easy calculation of example patient</li>
+</ul>
 </div><div class="column" style="width:60%;">
 <h3 id="option-newdata">Option <code>newdata</code></h3>
 <div class="cell">
@@ -474,13 +492,16 @@ Summary:
 1  1.46  75%  0.05279943   0.1003058</code></pre>
 </div>
 </div>
+<ul>
+<li>Practical when dealing with large data</li>
+</ul>
 </div></div>
 </section>
 <section id="behind-the-scenes" class="slide level2">
 <h2>Behind the scenes</h2>
-<ol type="1">
-<li>Model fit is stored as internal data in <code>sysdata.rda</code><br>(<code>cph</code> object from <code>rms</code>)</li>
-</ol>
+<ul>
+<li>Model fit is stored as internal data in <code>sysdata.rda</code> (<code>cph</code> object from <code>rms</code>)</li>
+</ul>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># Quality checks: don't save sensitive data</span></span>
 <span id="cb6-2"><a></a>idat.kidmo.model<span class="sc">$</span>x <span class="ot">=</span> <span class="cn">NULL</span></span>
 <span id="cb6-3"><a></a><span class="fu">assert</span>(<span class="fu">is.null</span>(idat.kidmo.model<span class="sc">$</span>x))</span>
@@ -490,23 +511,17 @@ Summary:
 <span id="cb6-7"><a></a>  <span class="at">internal =</span> <span class="cn">TRUE</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
 <span id="cb6-8"><a></a>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
-<li>Careful not to leak any patient level data!</li>
-</ul>
-<ol start="2" type="1">
-<li>Write function to access internal data</li>
-</ol>
+<li>Write function to access internal data
 <ul>
-<li>use <code>predict()</code> and calculate relative and absolute risks</li>
+<li>use <code>predict()</code> to get linear predictor</li>
+<li>calculate relative and absolute risks (textbook formulas)</li>
+</ul></li>
 </ul>
-<ol start="3" type="1">
-<li>Double check, double check, double check</li>
-</ol>
-<ul>
-<li>Technical documentation with example calculation</li>
-</ul>
+<p><em>Careful, do not leak any patient level data!</em></p>
 </section>
-<section id="plots" class="slide level2">
-<h2>Plots</h2>
+<section id="an-example-with-donor-age" class="slide level2">
+<h2>An example with donor age</h2>
+<p>Let’s create 4 kidney recipients with varying kidney donor age, other factors being equal:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>data <span class="ot">=</span> data[<span class="fu">rep</span>(<span class="dv">1</span>,<span class="dv">4</span>), ]</span>
 <span id="cb7-2"><a></a>data<span class="sc">$</span>D_age <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">45</span>, <span class="dv">65</span>, <span class="dv">85</span>)</span>
@@ -555,21 +570,28 @@ Summary:
 </div>
 </div>
 </section>
-<section id="plots-1" class="slide level2">
+<section id="plots" class="slide level2">
 <h2>Plots</h2>
-<p>The returned object also includes the cumulative incidence curves.</p>
+<p>The returned object also includes the cumulative incidence curves, see <code>stats$CI</code> and <code>stats$CI.time</code> (<code>stats$CI.lower</code> and <code>stats$CI.upper</code> for 95% CI).</p>
 
 <img data-src="slides_kidmo_files/figure-revealjs/unnamed-chunk-4-1.png" width="288" class="r-stretch quarto-figure-center"><p class="caption">Cumulative incidence curves for recipients of kidneys from donors of varying ages, all other factors being equal.</p></section>
-<section id="online-calculator" class="slide level2">
-<h2>Online calculator</h2>
+<section id="online-risk-calculator" class="slide level2">
+<h2>Online risk calculator</h2>
 <ul>
-<li>Runs on Shiny app runs on Posit Connect Cloud</li>
-<li>Quarto website implements app with iframe</li>
+<li>Shiny app runs on <strong>Posit Connect Cloud</strong></li>
+<li>Quarto website implements app with HTML <code>iframe</code></li>
+<li><a href="https://data.swisstransplant.org/kidmo/" class="uri">https://data.swisstransplant.org/kidmo/</a></li>
 </ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="riskcalc.png" style="width:100.0%"></p>
+</div><div class="column" style="width:50%;">
+<p>Code in Quarto Website:</p>
+<pre><code>&lt;iframe id="KIDMO" src="https://swisstransplant-kidmo-app.share.connect.posit.cloud" style="border: none; width: 100%; height: 570px" frameborder="0"&gt;&lt;/iframe&gt;</code></pre>
+</div></div>
 
 
-
-<img data-src="riskcalc.png" style="width:100.0%" class="r-stretch"></section>
+</section>
 
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">

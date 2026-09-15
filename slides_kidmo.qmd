@@ -142,39 +142,46 @@ Probability of an event by time *t* (with 95% confidence bands).
 
 ::::
 
-## Full model
+## Full model {.smaller}
 
 ![](full_model.png){width=83%}
 
-* 15 Predictor variables altogether
-* [--recipient DSA, --recipient time on dialysis]
-* [+transplant year]
+* 15 predictor variables altogether
+  * not included: recipient DSA, recipient time on dialysis (missing data)
+  * additionally included: transplant year
 
 ## Variable selection
 
-* Backward elimination with AIC (*p*&asymp;0.157) across 1,000 bootstrap samples^[Heinze & Dunkler, 2017, *Transpl Int*]
-* Selection criterion: variables contained in at least 50% of the reduced models
+* Backward elimination with AIC (*p*&asymp;0.157) across 1,000 bootstraps^[Heinze & Dunkler, 2017, *Transpl Int*]
+* Selection criterion: variables contained in at least 50% of the time
 
 &rarr; Entire model-building process was repeated within each bootstrap
 
 ### Final model
 
 * 7 variables
-+ 4 donor variables
-+ 3 recipient variables
+  + 4 donor variables
+  + 3 recipient variables
 
 ## Final model
 
 ![](final_model.png){width=90%}
 
-Not all predictors are *statistically significant* and that is okey!
+Not all predictors are *statistically significant* and that is okey.
 
 ## Partial effects
 
-![](partial_effects.png){width=100%}
+![Partial effects of the continuous variables (B) donor age, (C) recipient age, and (D) transplantation year on the graft loss rate.](partial_effects.png){width=100%}
 
-Partial effects of the continuous variables (B) donor age, (C) recipient age, and (D) transplantation year on the graft loss rate.
+* Reveals important relationship with outcome
+* Does it make sense, clinically?
 
+## Performance measures
+
+![](performance.png){width=100%}
+
+* Modest discrimination
+* Good calibration
 
 ## Model equation
 
@@ -195,7 +202,7 @@ The term $\mathrm{e}^{X\beta}$ is the individual-specific subdistribution hazard
 
 ![](Xb.png){width=100%}
 
-## Absolute risks
+## Absolute risks {.smaller}
 
 The cumulative incidence, i.e., the probability of graft loss by time $t$ for an individual with covariates $X$, is
 
@@ -247,6 +254,8 @@ kidmo(D_age = 45,
       R_retpx = TRUE,
       R_tpxyear = 2026)
 ```
+* Easy calculation of example patient
+
 :::
 
 ::: {.column width="60%"}
@@ -267,13 +276,16 @@ data = data.frame(D_age = 45,
 stats = kidmo(newdata = data)
 stats
 ```
+
+* Practical when dealing with large data
 :::
 
 ::::
 
 ## Behind the scenes
 
-1. Model fit is stored as internal data in `sysdata.rda`<br>(`cph` object from `rms`)
+* Model fit is stored as internal data in `sysdata.rda` (`cph` object from `rms`)
+
 
 ```r
 # Quality checks: don't save sensitive data
@@ -286,16 +298,15 @@ usethis::use_data(
 )
 ```
 
-* Careful not to leak any patient level data!
+* Write function to access internal data
+  + use `predict()` to get linear predictor
+  + calculate relative and absolute risks (textbook formulas)
 
-2. Write function to access internal data
-* use `predict()` and calculate relative and absolute risks
+*Careful, do not leak any patient level data!*
 
-3. Double check, double check, double check
+## An example with donor age
 
-* Technical documentation with example calculation
-
-## Plots
+Let's create 4 kidney recipients with varying kidney donor age, other factors being equal:
 
 ```{r}
 #| echo: true
@@ -309,7 +320,7 @@ stats$summary
 
 ## Plots
 
-The returned object also includes the cumulative incidence curves.
+The returned object also includes the cumulative incidence curves, see `stats$CI` and `stats$CI.time` (`stats$CI.lower` and `stats$CI.upper` for 95% CI).
 
 ```{r}
 #| fig-width: 3
@@ -338,9 +349,27 @@ legend("topright", legend = c("85 years", "65 years",
        lty = 1,  lwd = 2, bty = "n", cex = fs)
 ```
 
-## Online calculator
+## Online risk calculator
 
-* Runs on Shiny app runs on Posit Connect Cloud
-* Quarto website implements app with iframe
+* Shiny app runs on **Posit Connect Cloud**
+* Quarto website implements app with HTML `iframe`
+* <https://data.swisstransplant.org/kidmo/>
+
+:::: {.columns}
+
+::: {.column width="50%"}
 
 ![](riskcalc.png){width=100%}
+:::
+
+::: {.column width="50%"}
+
+Code in Quarto Website:
+
+```
+<iframe id="KIDMO" src="https://swisstransplant-kidmo-app.share.connect.posit.cloud" style="border: none; width: 100%; height: 570px" frameborder="0"></iframe>
+```
+
+:::
+
+::::

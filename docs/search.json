@@ -60,28 +60,35 @@
     "href": "slides_kidmo.html#full-model",
     "title": "R for predicting kidney transplant success",
     "section": "Full model",
-    "text": "Full model\n\n\n15 Predictor variables altogether\n[–recipient DSA, –recipient time on dialysis]\n[+transplant year]"
+    "text": "Full model\n\n\n15 predictor variables altogether\n\nnot included: recipient DSA, recipient time on dialysis (missing data)\nadditionally included: transplant year"
   },
   {
     "objectID": "slides_kidmo.html#variable-selection",
     "href": "slides_kidmo.html#variable-selection",
     "title": "R for predicting kidney transplant success",
     "section": "Variable selection",
-    "text": "Variable selection\n\nBackward elimination with AIC (p≈0.157) across 1,000 bootstrap samples1\nSelection criterion: variables contained in at least 50% of the reduced models\n\n→ Entire model-building process was repeated within each bootstrap\nFinal model\n\n7 variables\n4 donor variables\n3 recipient variables\n\nHeinze & Dunkler, 2017, Transpl Int"
+    "text": "Variable selection\n\nBackward elimination with AIC (p≈0.157) across 1,000 bootstraps1\nSelection criterion: variables contained in at least 50% of the time\n\n→ Entire model-building process was repeated within each bootstrap\nFinal model\n\n7 variables\n\n4 donor variables\n3 recipient variables\n\n\nHeinze & Dunkler, 2017, Transpl Int"
   },
   {
     "objectID": "slides_kidmo.html#final-model-1",
     "href": "slides_kidmo.html#final-model-1",
     "title": "R for predicting kidney transplant success",
     "section": "Final model",
-    "text": "Final model\n\nNot all predictors are statistically significant and that is okey!"
+    "text": "Final model\n\nNot all predictors are statistically significant and that is okey."
   },
   {
     "objectID": "slides_kidmo.html#partial-effects",
     "href": "slides_kidmo.html#partial-effects",
     "title": "R for predicting kidney transplant success",
     "section": "Partial effects",
-    "text": "Partial effects\n\nPartial effects of the continuous variables (B) donor age, (C) recipient age, and (D) transplantation year on the graft loss rate."
+    "text": "Partial effects\n\nPartial effects of the continuous variables (B) donor age, (C) recipient age, and (D) transplantation year on the graft loss rate.\nReveals important relationship with outcome\nDoes it make sense, clinically?"
+  },
+  {
+    "objectID": "slides_kidmo.html#performance-measures",
+    "href": "slides_kidmo.html#performance-measures",
+    "title": "R for predicting kidney transplant success",
+    "section": "Performance measures",
+    "text": "Performance measures\n\n\nModest discrimination\nGood calibration"
   },
   {
     "objectID": "slides_kidmo.html#model-equation",
@@ -116,34 +123,34 @@
     "href": "slides_kidmo.html#kidmo-function",
     "title": "R for predicting kidney transplant success",
     "section": "kidmo() function",
-    "text": "kidmo() function\n\n\nUsage\n\nlibrary(swt)\n\nkidmo(D_age = 45,\n      D_deathcause = \"anoxia\",\n      D_diabetes = TRUE,\n      D_hypertension = TRUE,\n      R_age = 50,\n      R_retpx = TRUE,\n      R_tpxyear = 2026)\n\nKIDMO Risk Score\nNumber of recipients: 1 \nSummary:\n  kidmo rank 2-year risk 5-year risk\n1  1.46  75%  0.05279943   0.1003058\n\n\n\nOption newdata\n\ndata = data.frame(D_age = 45,\n                  D_deathcause = \"anoxia\",\n                  D_diabetes = TRUE,\n                  D_hypertension = TRUE,\n                  R_age = 50,\n                  R_retpx = TRUE,\n                  R_tpxyear = 2026)\n\nstats = kidmo(newdata = data)\nstats\n\nKIDMO Risk Score\nNumber of recipients: 1 \nSummary:\n  kidmo rank 2-year risk 5-year risk\n1  1.46  75%  0.05279943   0.1003058"
+    "text": "kidmo() function\n\n\nUsage\n\nlibrary(swt)\n\nkidmo(D_age = 45,\n      D_deathcause = \"anoxia\",\n      D_diabetes = TRUE,\n      D_hypertension = TRUE,\n      R_age = 50,\n      R_retpx = TRUE,\n      R_tpxyear = 2026)\n\nKIDMO Risk Score\nNumber of recipients: 1 \nSummary:\n  kidmo rank 2-year risk 5-year risk\n1  1.46  75%  0.05279943   0.1003058\n\n\n\nEasy calculation of example patient\n\n\nOption newdata\n\ndata = data.frame(D_age = 45,\n                  D_deathcause = \"anoxia\",\n                  D_diabetes = TRUE,\n                  D_hypertension = TRUE,\n                  R_age = 50,\n                  R_retpx = TRUE,\n                  R_tpxyear = 2026)\n\nstats = kidmo(newdata = data)\nstats\n\nKIDMO Risk Score\nNumber of recipients: 1 \nSummary:\n  kidmo rank 2-year risk 5-year risk\n1  1.46  75%  0.05279943   0.1003058\n\n\n\nPractical when dealing with large data"
   },
   {
     "objectID": "slides_kidmo.html#behind-the-scenes",
     "href": "slides_kidmo.html#behind-the-scenes",
     "title": "R for predicting kidney transplant success",
     "section": "Behind the scenes",
-    "text": "Behind the scenes\n\nModel fit is stored as internal data in sysdata.rda(cph object from rms)\n\n# Quality checks: don't save sensitive data\nidat.kidmo.model$x = NULL\nassert(is.null(idat.kidmo.model$x))\n\nusethis::use_data(\n  idat.kidmo.model,\n  internal = TRUE, overwrite = TRUE\n)\n\nCareful not to leak any patient level data!\n\n\nWrite function to access internal data\n\n\nuse predict() and calculate relative and absolute risks\n\n\nDouble check, double check, double check\n\n\nTechnical documentation with example calculation"
+    "text": "Behind the scenes\n\nModel fit is stored as internal data in sysdata.rda (cph object from rms)\n\n# Quality checks: don't save sensitive data\nidat.kidmo.model$x = NULL\nassert(is.null(idat.kidmo.model$x))\n\nusethis::use_data(\n  idat.kidmo.model,\n  internal = TRUE, overwrite = TRUE\n)\n\nWrite function to access internal data\n\nuse predict() to get linear predictor\ncalculate relative and absolute risks (textbook formulas)\n\n\nCareful, do not leak any patient level data!"
+  },
+  {
+    "objectID": "slides_kidmo.html#an-example-with-donor-age",
+    "href": "slides_kidmo.html#an-example-with-donor-age",
+    "title": "R for predicting kidney transplant success",
+    "section": "An example with donor age",
+    "text": "An example with donor age\nLet’s create 4 kidney recipients with varying kidney donor age, other factors being equal:\n\ndata = data[rep(1,4), ]\ndata$D_age = c(25, 45, 65, 85)\n\nstats = kidmo(newdata = data)\nstats$summary\n\n\n\n\n\nkidmo\nrank\n2-year risk\n5-year risk\n\n\n\n\n1.25\n65%\n0.0450961\n0.0859930\n\n\n1.46\n75%\n0.0527994\n0.1003058\n\n\n2.56\n94%\n0.0904031\n0.1685937\n\n\n6.22\n100%\n0.2058106\n0.3617473"
   },
   {
     "objectID": "slides_kidmo.html#plots",
     "href": "slides_kidmo.html#plots",
     "title": "R for predicting kidney transplant success",
     "section": "Plots",
-    "text": "Plots\n\ndata = data[rep(1,4), ]\ndata$D_age = c(25, 45, 65, 85)\n\nstats = kidmo(newdata = data)\nstats$summary\n\n\n\n\n\nkidmo\nrank\n2-year risk\n5-year risk\n\n\n\n\n1.25\n65%\n0.0450961\n0.0859930\n\n\n1.46\n75%\n0.0527994\n0.1003058\n\n\n2.56\n94%\n0.0904031\n0.1685937\n\n\n6.22\n100%\n0.2058106\n0.3617473"
+    "text": "Plots\nThe returned object also includes the cumulative incidence curves, see stats$CI and stats$CI.time (stats$CI.lower and stats$CI.upper for 95% CI).\n\nCumulative incidence curves for recipients of kidneys from donors of varying ages, all other factors being equal."
   },
   {
-    "objectID": "slides_kidmo.html#plots-1",
-    "href": "slides_kidmo.html#plots-1",
+    "objectID": "slides_kidmo.html#online-risk-calculator",
+    "href": "slides_kidmo.html#online-risk-calculator",
     "title": "R for predicting kidney transplant success",
-    "section": "Plots",
-    "text": "Plots\nThe returned object also includes the cumulative incidence curves.\n\nCumulative incidence curves for recipients of kidneys from donors of varying ages, all other factors being equal."
-  },
-  {
-    "objectID": "slides_kidmo.html#online-calculator",
-    "href": "slides_kidmo.html#online-calculator",
-    "title": "R for predicting kidney transplant success",
-    "section": "Online calculator",
-    "text": "Online calculator\n\nRuns on Shiny app runs on Posit Connect Cloud\nQuarto website implements app with iframe"
+    "section": "Online risk calculator",
+    "text": "Online risk calculator\n\nShiny app runs on Posit Connect Cloud\nQuarto website implements app with HTML iframe\nhttps://data.swisstransplant.org/kidmo/\n\n\n\n\n\nCode in Quarto Website:\n&lt;iframe id=\"KIDMO\" src=\"https://swisstransplant-kidmo-app.share.connect.posit.cloud\" style=\"border: none; width: 100%; height: 570px\" frameborder=\"0\"&gt;&lt;/iframe&gt;"
   }
 ]
