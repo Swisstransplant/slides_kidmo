@@ -81,7 +81,7 @@
     "href": "slides_kidmo.html#partial-effects",
     "title": "R for predicting kidney transplant success",
     "section": "Partial effects",
-    "text": "Partial effects\n\nPartial effects of the continuous variables (B) donor age, (C) recipient age, and (D) transplantation year on the graft loss rate.\nReveals important relationship with outcome\nDoes it make sense, clinically?"
+    "text": "Partial effects\n\n\n\nPartial effects of the continuous variables (B) donor age, (C) recipient age, and (D) transplantation year on the graft loss rate.\n\n\n\nReveals important relationship with outcome\nDoes it make sense, clinically?"
   },
   {
     "objectID": "slides_kidmo.html#performance-measures",
@@ -144,7 +144,7 @@
     "href": "slides_kidmo.html#plots",
     "title": "R for predicting kidney transplant success",
     "section": "Plots",
-    "text": "Plots\nThe returned object also includes the cumulative incidence curves, see stats$CI and stats$CI.time (stats$CI.lower and stats$CI.upper for 95% CI).\n\nCumulative incidence curves for recipients of kidneys from donors of varying ages, all other factors being equal."
+    "text": "Plots\nThe returned object also includes the cumulative incidence curves, see stats$CI and stats$CI.time (stats$CI.lower and stats$CI.upper for 95% CI).\n\n\n\n\n\nCumulative incidence curves for recipients of kidneys from donors of varying ages, all other factors being equal."
   },
   {
     "objectID": "slides_kidmo.html#online-risk-calculator",

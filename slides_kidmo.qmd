@@ -17,6 +17,7 @@ format:
     df-print: kable
     embed-resources: false
     chalkboard: false
+    auto-stretch: false
 ---
 
 ## Study objective
@@ -41,7 +42,7 @@ Clinical prediction models play a vital role in advancing **personalized medicin
 | *Setting*     | Six Swiss transplant centers: Basel, Bern, Geneva, Lausanne, St. Gallen, and Zurich.|
 | *Primary Outcome* | Time to graft loss (interval from transplantation to irreversible graft failure). Patient death was treated as a **competing risk**.|
 
-## Swiss transplant centers {.scrollable}
+## Swiss transplant centers
 
 ![](centers.png){width=90%}
 
