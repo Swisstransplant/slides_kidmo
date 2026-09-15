@@ -340,7 +340,7 @@ legend("topright", legend = c("85 years", "65 years",
 
 ## Online calculator
 
-Runs on psot connec clouse
-Quarto website that implements app with iframe
+* Runs on Shiny app runs on Posit Connect Cloud
+* Quarto website implements app with iframe
 
 ![](riskcalc.png){width=100%}

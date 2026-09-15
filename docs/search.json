@@ -144,6 +144,6 @@
     "href": "slides_kidmo.html#online-calculator",
     "title": "R for predicting kidney transplant success",
     "section": "Online calculator",
-    "text": "Online calculator\nRuns on psot connec clouse Quarto website that implements app with iframe"
+    "text": "Online calculator\n\nRuns on Shiny app runs on Posit Connect Cloud\nQuarto website implements app with iframe"
   }
 ]
