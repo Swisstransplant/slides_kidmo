@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/tabby.min.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.38">
+
+  <meta name="author" content="Simon Schwab">
+  <title>R for predicting kidney transplant success</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-12149ac30a0be86929c370dfde010119.css">
+  <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">R for predicting kidney transplant success</h1>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Simon Schwab 
+</div>
+        <p class="quarto-title-affiliation">
+            Swisstransplant, Bern
+          </p>
+        <p class="quarto-title-affiliation">
+            Center for Reproducible Science and Research Synthesis, University of Zurich
+          </p>
+    </div>
+</div>
+
+  <p class="date">16. September 2026</p>
+</section>
+<section id="study-objective" class="slide level2">
+<h2>Study objective</h2>
+<p>KIDMO is a <strong>clinical prediction model</strong> to estimate <strong>graft loss</strong> risk in deceased-donor kidney transplantation. It uses a combination of</p>
+<ul>
+<li><strong>donor</strong> and</li>
+<li><strong>recipient</strong> clinical characteristics.</li>
+</ul>
+<h3 id="goal">Goal</h3>
+<p>Inform clinicians and patients of individual <strong>outcome risks</strong> at the time of organ offer to support <strong>decision-making</strong> and improve outcomes.</p>
+<p>Clinical prediction models play a vital role in advancing <strong>personalized medicine</strong>.</p>
+</section>
+<section id="design-participants-setting-and-outcome" class="slide level2">
+<h2>Design, participants, setting and outcome</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 82%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><em>Design</em></td>
+<td>National multi-center retrospective cohort study.</td>
+</tr>
+<tr class="even">
+<td><em>Participants</em></td>
+<td>All deceased-donor kidney transplant recipients from 2008 to 2021.</td>
+</tr>
+<tr class="odd">
+<td><em>Setting</em></td>
+<td>Six Swiss transplant centers: Basel, Bern, Geneva, Lausanne, St.&nbsp;Gallen, and Zurich.</td>
+</tr>
+<tr class="even">
+<td><em>Primary Outcome</em></td>
+<td>Time to graft loss (interval from transplantation to irreversible graft failure). Patient death was treated as a <strong>competing risk</strong>.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="swiss-transplant-centers" class="slide level2">
+<h2>Swiss transplant centers</h2>
+
+<img data-src="centers.png" style="width:100.0%" class="r-stretch"></section>
+<section id="methods" class="slide level2">
+<h2>Methods</h2>
+<ul>
+<li>Competing risk regression (Fine &amp; Gray model)</li>
+<li>Non-linear modelling (restricted cubic splines)</li>
+<li>Model performance: C-statistic, area under the curve (AUC), Brier score, calibration plot, calibration in-the-large, calibration slope</li>
+<li>Internal validation and optimism correction (bootstrapping with B=1,000)</li>
+<li>Internal-external cross-validation</li>
+<li>Clinical utility (decision curve analysis and net benefit)</li>
+</ul>
+</section>
+<section id="study-protocol" class="slide level2">
+<h2>Study protocol</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>We published a study protocol.<sup>1</sup></p>
+<ul>
+<li>Prespecified predictors</li>
+<li>Sample size calculation<sup>2</sup></li>
+<li>N=2,042 recipients</li>
+<li>167 events</li>
+<li>19 parameters (16 variables)</li>
+<li>EPP 8.8</li>
+<li>Statistical analysis plan</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><img data-src="study_protocol.png" style="width:100.0%"></p>
+</div></div>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>Schwab et al.&nbsp;2023, <em>Diagn Progn Res</em></p></li><li id="fn2"><p>Riley et al.&nbsp;2020, <em>BMJ</em></p></li></ol></aside></section>
+<section id="participant-flow" class="slide level2">
+<h2>Participant flow</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p><strong>87% of the population</strong> in the model development.</p>
+<p><em>Exclusion:</em></p>
+<ul>
+<li>10.1% with no consent</li>
+<li>2.9% missing data</li>
+</ul>
+<p><em>Dropouts (were censored):</em></p>
+<ul>
+<li>34 (1.4%) dropouts</li>
+<li>33 moved away</li>
+<li>1 other reason</li>
+</ul>
+</div><div class="column" style="width:60%;">
+<p><img data-src="consort_diagram.png" style="width:90.0%"></p>
+</div></div>
+</section>
+<section id="receipient-and-donor-characteristics" class="slide level2 nostretch">
+<h2>Receipient and donor characteristics</h2>
+<p><img data-src="table1.png" style="width:70.0%"></p>
+</section>
+<section id="cumulative-incidence" class="slide level2">
+<h2>Cumulative incidence</h2>
+<p>Probability of an event by time <em>t</em> (with 95% confidence bands).</p>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><img data-src="ci.png" style="width:100.0%"></p>
+</div><div class="column" style="width:70%;">
+<div style="font-size: 80%;">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Outcome</th>
+<th>2-years</th>
+<th>5-y years</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Graft loss</td>
+<td>4.4% (3.6–5.3)</td>
+<td>8.7% (7.4–10.0)</td>
+</tr>
+<tr class="even">
+<td>Death</td>
+<td>4.3% (3.5–5.2)</td>
+<td>10.4% (9.0–11.9)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+</section>
+<section id="full-model" class="slide level2">
+<h2>Full model</h2>
+
+<img data-src="full_model.png" style="width:83.0%" class="r-stretch"><ul>
+<li>15 Predictor variables altogether</li>
+<li>[–recipient DSA, –recipient time on dialysis]</li>
+<li>[+transplant year]</li>
+</ul>
+</section>
+<section id="variable-selection" class="slide level2">
+<h2>Variable selection</h2>
+<ul>
+<li>Backward elimination with AIC (<em>p</em>≈0.157) across 1,000 bootstrap samples<sup>1</sup></li>
+<li>Selection criterion: variables contained in at least 50% of the reduced models</li>
+</ul>
+<p>→ Entire model-building process was repeated within each bootstrap</p>
+<h3 id="final-model">Final model</h3>
+<ul>
+<li>7 variables</li>
+<li>4 donor variables</li>
+<li>3 recipient variables</li>
+</ul>
+<aside><ol class="aside-footnotes"><li id="fn3"><p>Heinze &amp; Dunkler, 2017, <em>Transpl Int</em></p></li></ol></aside></section>
+<section id="final-model-1" class="slide level2">
+<h2>Final model</h2>
+
+<img data-src="final_model.png" style="width:90.0%" class="r-stretch"><p>Not all predictors are <em>statistically significant</em> and that is okey!</p>
+</section>
+<section id="partial-effects" class="slide level2">
+<h2>Partial effects</h2>
+
+<img data-src="partial_effects.png" style="width:100.0%" class="r-stretch"><p>Partial effects of the continuous variables (B) donor age, (C) recipient age, and (D) transplantation year on the graft loss rate.</p>
+</section>
+<section id="model-equation" class="slide level2">
+<h2>Model equation</h2>
+<p>Uer the Fine–Gray formulation, the subdistribution hazard leads to the following expression for the graft-survival function:</p>
+<p><span class="math display">\[\Pr(T\geq t~|~X) = S_{0}(t)^{\mathrm{e}^{X\beta}},\]</span></p>
+<p>where <span class="math inline">\(S_{0}(t)\)</span> denotes the baseline survival function. Baseline survival values used for prediction are provided in the table below for the clinically relevant time points <span class="math inline">\(t = 2\)</span> and <span class="math inline">\(t = 5\)</span> years.</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(t\)</span></th>
+<th><span class="math inline">\(S_{0}(t)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2</td>
+<td>0.9594</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>0.9225</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="linear-predictor" class="slide level2">
+<h2>Linear predictor</h2>
+<p>The term <span class="math inline">\(\mathrm{e}^{X\beta}\)</span> is the individual-specific subdistribution hazard ratio derived from the linear predictor <span class="math inline">\(X\hat{\beta}\)</span> shown below.</p>
+
+<img data-src="Xb.png" style="width:100.0%" class="r-stretch"></section>
+<section id="absolute-risks" class="slide level2">
+<h2>Absolute risks</h2>
+<p>The cumulative incidence, i.e., the probability of graft loss by time <span class="math inline">\(t\)</span> for an individual with covariates <span class="math inline">\(X\)</span>, is</p>
+<p><span class="math display">\[
+F(t~|~X) = 1 - S_{0}(t)^{\textrm{e}^{X\beta}},
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(S_0(t)\)</span> is the baseline graft survival function at time <span class="math inline">\(t\)</span>, and</li>
+<li><span class="math inline">\(\textrm{e}^{X\beta}\)</span> is the hazard ratio, obtained from the linear predictor.</li>
+</ul>
+<p>Accordingly, the cumulative incidence at 2 and 5 years after transplant is given by:</p>
+<ul>
+<li>2-year risk: <span class="math inline">\(F(t = 2 | X) = 1 - S_{0}(2)^{\textrm{e}^{X\beta}}\)</span> = <span class="math inline">\(1 - \textrm{0.959}^{\textrm{e}^{X\beta}}\)</span>,</li>
+<li>5-year risk: <span class="math inline">\(F(t = 5 | X) = 1 - S_{0}(5)^{\textrm{e}^{X\beta}}\)</span> = <span class="math inline">\(1 - \textrm{0.922}^{\textrm{e}^{X\beta}}\)</span>.</li>
+</ul>
+</section>
+<section id="implementation-in-swisstransplant-package-swt" class="slide level2">
+<h2>Implementation in Swisstransplant package <code>swt</code></h2>
+<p>The KIDMO risk score has been implemented in the Swisstransplant R package <code>swt</code>.</p>
+<ul>
+<li><a href="https://data.swisstransplant.org/tools/" class="uri">https://data.swisstransplant.org/tools/</a></li>
+<li>enable easy calculation of the KIDMO score (among other stuff)</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"Swisstransplant/swt"</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+
+<img data-src="hex-swt.png" style="width:100.0%" class="r-stretch"></section>
+<section id="kidmo-function" class="slide level2">
+<h2><code>kidmo()</code> function</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<h3 id="usage">Usage</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="fu">library</span>(swt)</span>
+<span id="cb2-2"><a></a></span>
+<span id="cb2-3"><a></a><span class="fu">kidmo</span>(<span class="at">D_age =</span> <span class="dv">45</span>,</span>
+<span id="cb2-4"><a></a>      <span class="at">D_deathcause =</span> <span class="st">"anoxia"</span>,</span>
+<span id="cb2-5"><a></a>      <span class="at">D_diabetes =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-6"><a></a>      <span class="at">D_hypertension =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-7"><a></a>      <span class="at">R_age =</span> <span class="dv">50</span>,</span>
+<span id="cb2-8"><a></a>      <span class="at">R_retpx =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-9"><a></a>      <span class="at">R_tpxyear =</span> <span class="dv">2026</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>KIDMO Risk Score
+Number of recipients: 1 
+Summary:
+  kidmo rank 2-year risk 5-year risk
+1  1.46  75%  0.05279943   0.1003058</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:60%;">
+<h3 id="option-newdata">Option <code>newdata</code></h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>data <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">D_age =</span> <span class="dv">45</span>,</span>
+<span id="cb4-2"><a></a>                  <span class="at">D_deathcause =</span> <span class="st">"anoxia"</span>,</span>
+<span id="cb4-3"><a></a>                  <span class="at">D_diabetes =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-4"><a></a>                  <span class="at">D_hypertension =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-5"><a></a>                  <span class="at">R_age =</span> <span class="dv">50</span>,</span>
+<span id="cb4-6"><a></a>                  <span class="at">R_retpx =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-7"><a></a>                  <span class="at">R_tpxyear =</span> <span class="dv">2026</span>)</span>
+<span id="cb4-8"><a></a></span>
+<span id="cb4-9"><a></a>stats <span class="ot">=</span> <span class="fu">kidmo</span>(<span class="at">newdata =</span> data)</span>
+<span id="cb4-10"><a></a>stats</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>KIDMO Risk Score
+Number of recipients: 1 
+Summary:
+  kidmo rank 2-year risk 5-year risk
+1  1.46  75%  0.05279943   0.1003058</code></pre>
+</div>
+</div>
+</div></div>
+</section>
+<section id="behind-the-scenes" class="slide level2">
+<h2>Behind the scenes</h2>
+<ol type="1">
+<li>Model fit is stored as internal data in <code>sysdata.rda</code><br>(<code>cph</code> object from <code>rms</code>)</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># Quality checks: don't save sensitive data</span></span>
+<span id="cb6-2"><a></a>idat.kidmo.model<span class="sc">$</span>x <span class="ot">=</span> <span class="cn">NULL</span></span>
+<span id="cb6-3"><a></a><span class="fu">assert</span>(<span class="fu">is.null</span>(idat.kidmo.model<span class="sc">$</span>x))</span>
+<span id="cb6-4"><a></a></span>
+<span id="cb6-5"><a></a>usethis<span class="sc">::</span><span class="fu">use_data</span>(</span>
+<span id="cb6-6"><a></a>  idat.kidmo.model,</span>
+<span id="cb6-7"><a></a>  <span class="at">internal =</span> <span class="cn">TRUE</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-8"><a></a>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>Careful not to leak any patient level data!</li>
+</ul>
+<ol start="2" type="1">
+<li>Write function to access internal data</li>
+</ol>
+<ul>
+<li>use <code>predict()</code> and calculate relative and absolute risks</li>
+</ul>
+<ol start="3" type="1">
+<li>Double check, double check, double check</li>
+</ol>
+<ul>
+<li>Technical documentation with example calculation</li>
+</ul>
+</section>
+<section id="plots" class="slide level2">
+<h2>Plots</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>data <span class="ot">=</span> data[<span class="fu">rep</span>(<span class="dv">1</span>,<span class="dv">4</span>), ]</span>
+<span id="cb7-2"><a></a>data<span class="sc">$</span>D_age <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">45</span>, <span class="dv">65</span>, <span class="dv">85</span>)</span>
+<span id="cb7-3"><a></a></span>
+<span id="cb7-4"><a></a>stats <span class="ot">=</span> <span class="fu">kidmo</span>(<span class="at">newdata =</span> data)</span>
+<span id="cb7-5"><a></a>stats<span class="sc">$</span>summary</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">kidmo</th>
+<th style="text-align: left;">rank</th>
+<th style="text-align: right;">2-year risk</th>
+<th style="text-align: right;">5-year risk</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1.25</td>
+<td style="text-align: left;">65%</td>
+<td style="text-align: right;">0.0450961</td>
+<td style="text-align: right;">0.0859930</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1.46</td>
+<td style="text-align: left;">75%</td>
+<td style="text-align: right;">0.0527994</td>
+<td style="text-align: right;">0.1003058</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2.56</td>
+<td style="text-align: left;">94%</td>
+<td style="text-align: right;">0.0904031</td>
+<td style="text-align: right;">0.1685937</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6.22</td>
+<td style="text-align: left;">100%</td>
+<td style="text-align: right;">0.2058106</td>
+<td style="text-align: right;">0.3617473</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="plots-1" class="slide level2">
+<h2>Plots</h2>
+<p>The returned object also includes the cumulative incidence curves.</p>
+
+<img data-src="slides_kidmo_files/figure-revealjs/unnamed-chunk-4-1.png" width="288" class="r-stretch quarto-figure-center"><p class="caption">Cumulative incidence curves for recipients of kidneys from donors of varying ages, all other factors being equal.</p></section>
+<section id="online-calculator" class="slide level2">
+<h2>Online calculator</h2>
+<p>Runs on psot connec clouse Quarto website that implements app with iframe</p>
+
+
+
+<img data-src="riskcalc.png" style="width:100.0%" class="r-stretch"></section>
+
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="SWT_2955_2021.png" class="slide-logo"></p>
+<div class="footer footer-default">
+<p>R meets Health, Zurich R User Group</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Kopiert");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Kopiert");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

@@ -1,0 +1,149 @@
+[
+  {
+    "objectID": "slides_kidmo.html#study-objective",
+    "href": "slides_kidmo.html#study-objective",
+    "title": "R for predicting kidney transplant success",
+    "section": "Study objective",
+    "text": "Study objective\nKIDMO is a clinical prediction model to estimate graft loss risk in deceased-donor kidney transplantation. It uses a combination of\n\ndonor and\nrecipient clinical characteristics.\n\nGoal\nInform clinicians and patients of individual outcome risks at the time of organ offer to support decision-making and improve outcomes.\nClinical prediction models play a vital role in advancing personalized medicine."
+  },
+  {
+    "objectID": "slides_kidmo.html#design-participants-setting-and-outcome",
+    "href": "slides_kidmo.html#design-participants-setting-and-outcome",
+    "title": "R for predicting kidney transplant success",
+    "section": "Design, participants, setting and outcome",
+    "text": "Design, participants, setting and outcome\n\n\n\n\n\n\n\nDesign\nNational multi-center retrospective cohort study.\n\n\nParticipants\nAll deceased-donor kidney transplant recipients from 2008 to 2021.\n\n\nSetting\nSix Swiss transplant centers: Basel, Bern, Geneva, Lausanne, St. Gallen, and Zurich.\n\n\nPrimary Outcome\nTime to graft loss (interval from transplantation to irreversible graft failure). Patient death was treated as a competing risk."
+  },
+  {
+    "objectID": "slides_kidmo.html#swiss-transplant-centers",
+    "href": "slides_kidmo.html#swiss-transplant-centers",
+    "title": "R for predicting kidney transplant success",
+    "section": "Swiss transplant centers",
+    "text": "Swiss transplant centers"
+  },
+  {
+    "objectID": "slides_kidmo.html#methods",
+    "href": "slides_kidmo.html#methods",
+    "title": "R for predicting kidney transplant success",
+    "section": "Methods",
+    "text": "Methods\n\nCompeting risk regression (Fine & Gray model)\nNon-linear modelling (restricted cubic splines)\nModel performance: C-statistic, area under the curve (AUC), Brier score, calibration plot, calibration in-the-large, calibration slope\nInternal validation and optimism correction (bootstrapping with B=1,000)\nInternal-external cross-validation\nClinical utility (decision curve analysis and net benefit)"
+  },
+  {
+    "objectID": "slides_kidmo.html#study-protocol",
+    "href": "slides_kidmo.html#study-protocol",
+    "title": "R for predicting kidney transplant success",
+    "section": "Study protocol",
+    "text": "Study protocol\n\n\nWe published a study protocol.1\n\nPrespecified predictors\nSample size calculation2\nN=2,042 recipients\n167 events\n19 parameters (16 variables)\nEPP 8.8\nStatistical analysis plan\n\n\n\n\nSchwab et al. 2023, Diagn Progn ResRiley et al. 2020, BMJ"
+  },
+  {
+    "objectID": "slides_kidmo.html#participant-flow",
+    "href": "slides_kidmo.html#participant-flow",
+    "title": "R for predicting kidney transplant success",
+    "section": "Participant flow",
+    "text": "Participant flow\n\n\n87% of the population in the model development.\nExclusion:\n\n10.1% with no consent\n2.9% missing data\n\nDropouts (were censored):\n\n34 (1.4%) dropouts\n33 moved away\n1 other reason"
+  },
+  {
+    "objectID": "slides_kidmo.html#receipient-and-donor-characteristics",
+    "href": "slides_kidmo.html#receipient-and-donor-characteristics",
+    "title": "R for predicting kidney transplant success",
+    "section": "Receipient and donor characteristics",
+    "text": "Receipient and donor characteristics"
+  },
+  {
+    "objectID": "slides_kidmo.html#cumulative-incidence",
+    "href": "slides_kidmo.html#cumulative-incidence",
+    "title": "R for predicting kidney transplant success",
+    "section": "Cumulative incidence",
+    "text": "Cumulative incidence\nProbability of an event by time t (with 95% confidence bands).\n\n\n\n\n\n\n\n\nOutcome\n2-years\n5-y years\n\n\n\n\nGraft loss\n4.4% (3.6–5.3)\n8.7% (7.4–10.0)\n\n\nDeath\n4.3% (3.5–5.2)\n10.4% (9.0–11.9)"
+  },
+  {
+    "objectID": "slides_kidmo.html#full-model",
+    "href": "slides_kidmo.html#full-model",
+    "title": "R for predicting kidney transplant success",
+    "section": "Full model",
+    "text": "Full model\n\n\n15 Predictor variables altogether\n[–recipient DSA, –recipient time on dialysis]\n[+transplant year]"
+  },
+  {
+    "objectID": "slides_kidmo.html#variable-selection",
+    "href": "slides_kidmo.html#variable-selection",
+    "title": "R for predicting kidney transplant success",
+    "section": "Variable selection",
+    "text": "Variable selection\n\nBackward elimination with AIC (p≈0.157) across 1,000 bootstrap samples1\nSelection criterion: variables contained in at least 50% of the reduced models\n\n→ Entire model-building process was repeated within each bootstrap\nFinal model\n\n7 variables\n4 donor variables\n3 recipient variables\n\nHeinze & Dunkler, 2017, Transpl Int"
+  },
+  {
+    "objectID": "slides_kidmo.html#final-model-1",
+    "href": "slides_kidmo.html#final-model-1",
+    "title": "R for predicting kidney transplant success",
+    "section": "Final model",
+    "text": "Final model\n\nNot all predictors are statistically significant and that is okey!"
+  },
+  {
+    "objectID": "slides_kidmo.html#partial-effects",
+    "href": "slides_kidmo.html#partial-effects",
+    "title": "R for predicting kidney transplant success",
+    "section": "Partial effects",
+    "text": "Partial effects\n\nPartial effects of the continuous variables (B) donor age, (C) recipient age, and (D) transplantation year on the graft loss rate."
+  },
+  {
+    "objectID": "slides_kidmo.html#model-equation",
+    "href": "slides_kidmo.html#model-equation",
+    "title": "R for predicting kidney transplant success",
+    "section": "Model equation",
+    "text": "Model equation\nUer the Fine–Gray formulation, the subdistribution hazard leads to the following expression for the graft-survival function:\n\\[\\Pr(T\\geq t~|~X) = S_{0}(t)^{\\mathrm{e}^{X\\beta}},\\]\nwhere \\(S_{0}(t)\\) denotes the baseline survival function. Baseline survival values used for prediction are provided in the table below for the clinically relevant time points \\(t = 2\\) and \\(t = 5\\) years.\n\n\n\n\\(t\\)\n\\(S_{0}(t)\\)\n\n\n\n\n2\n0.9594\n\n\n5\n0.9225"
+  },
+  {
+    "objectID": "slides_kidmo.html#linear-predictor",
+    "href": "slides_kidmo.html#linear-predictor",
+    "title": "R for predicting kidney transplant success",
+    "section": "Linear predictor",
+    "text": "Linear predictor\nThe term \\(\\mathrm{e}^{X\\beta}\\) is the individual-specific subdistribution hazard ratio derived from the linear predictor \\(X\\hat{\\beta}\\) shown below."
+  },
+  {
+    "objectID": "slides_kidmo.html#absolute-risks",
+    "href": "slides_kidmo.html#absolute-risks",
+    "title": "R for predicting kidney transplant success",
+    "section": "Absolute risks",
+    "text": "Absolute risks\nThe cumulative incidence, i.e., the probability of graft loss by time \\(t\\) for an individual with covariates \\(X\\), is\n\\[\nF(t~|~X) = 1 - S_{0}(t)^{\\textrm{e}^{X\\beta}},\n\\]\nwhere\n\n\\(S_0(t)\\) is the baseline graft survival function at time \\(t\\), and\n\\(\\textrm{e}^{X\\beta}\\) is the hazard ratio, obtained from the linear predictor.\n\nAccordingly, the cumulative incidence at 2 and 5 years after transplant is given by:\n\n2-year risk: \\(F(t = 2 | X) = 1 - S_{0}(2)^{\\textrm{e}^{X\\beta}}\\) = \\(1 - \\textrm{0.959}^{\\textrm{e}^{X\\beta}}\\),\n5-year risk: \\(F(t = 5 | X) = 1 - S_{0}(5)^{\\textrm{e}^{X\\beta}}\\) = \\(1 - \\textrm{0.922}^{\\textrm{e}^{X\\beta}}\\)."
+  },
+  {
+    "objectID": "slides_kidmo.html#implementation-in-swisstransplant-package-swt",
+    "href": "slides_kidmo.html#implementation-in-swisstransplant-package-swt",
+    "title": "R for predicting kidney transplant success",
+    "section": "Implementation in Swisstransplant package swt",
+    "text": "Implementation in Swisstransplant package swt\nThe KIDMO risk score has been implemented in the Swisstransplant R package swt.\n\nhttps://data.swisstransplant.org/tools/\nenable easy calculation of the KIDMO score (among other stuff)\n\nremotes::install_github(\"Swisstransplant/swt\")"
+  },
+  {
+    "objectID": "slides_kidmo.html#kidmo-function",
+    "href": "slides_kidmo.html#kidmo-function",
+    "title": "R for predicting kidney transplant success",
+    "section": "kidmo() function",
+    "text": "kidmo() function\n\n\nUsage\n\nlibrary(swt)\n\nkidmo(D_age = 45,\n      D_deathcause = \"anoxia\",\n      D_diabetes = TRUE,\n      D_hypertension = TRUE,\n      R_age = 50,\n      R_retpx = TRUE,\n      R_tpxyear = 2026)\n\nKIDMO Risk Score\nNumber of recipients: 1 \nSummary:\n  kidmo rank 2-year risk 5-year risk\n1  1.46  75%  0.05279943   0.1003058\n\n\n\nOption newdata\n\ndata = data.frame(D_age = 45,\n                  D_deathcause = \"anoxia\",\n                  D_diabetes = TRUE,\n                  D_hypertension = TRUE,\n                  R_age = 50,\n                  R_retpx = TRUE,\n                  R_tpxyear = 2026)\n\nstats = kidmo(newdata = data)\nstats\n\nKIDMO Risk Score\nNumber of recipients: 1 \nSummary:\n  kidmo rank 2-year risk 5-year risk\n1  1.46  75%  0.05279943   0.1003058"
+  },
+  {
+    "objectID": "slides_kidmo.html#behind-the-scenes",
+    "href": "slides_kidmo.html#behind-the-scenes",
+    "title": "R for predicting kidney transplant success",
+    "section": "Behind the scenes",
+    "text": "Behind the scenes\n\nModel fit is stored as internal data in sysdata.rda(cph object from rms)\n\n# Quality checks: don't save sensitive data\nidat.kidmo.model$x = NULL\nassert(is.null(idat.kidmo.model$x))\n\nusethis::use_data(\n  idat.kidmo.model,\n  internal = TRUE, overwrite = TRUE\n)\n\nCareful not to leak any patient level data!\n\n\nWrite function to access internal data\n\n\nuse predict() and calculate relative and absolute risks\n\n\nDouble check, double check, double check\n\n\nTechnical documentation with example calculation"
+  },
+  {
+    "objectID": "slides_kidmo.html#plots",
+    "href": "slides_kidmo.html#plots",
+    "title": "R for predicting kidney transplant success",
+    "section": "Plots",
+    "text": "Plots\n\ndata = data[rep(1,4), ]\ndata$D_age = c(25, 45, 65, 85)\n\nstats = kidmo(newdata = data)\nstats$summary\n\n\n\n\n\nkidmo\nrank\n2-year risk\n5-year risk\n\n\n\n\n1.25\n65%\n0.0450961\n0.0859930\n\n\n1.46\n75%\n0.0527994\n0.1003058\n\n\n2.56\n94%\n0.0904031\n0.1685937\n\n\n6.22\n100%\n0.2058106\n0.3617473"
+  },
+  {
+    "objectID": "slides_kidmo.html#plots-1",
+    "href": "slides_kidmo.html#plots-1",
+    "title": "R for predicting kidney transplant success",
+    "section": "Plots",
+    "text": "Plots\nThe returned object also includes the cumulative incidence curves.\n\nCumulative incidence curves for recipients of kidneys from donors of varying ages, all other factors being equal."
+  },
+  {
+    "objectID": "slides_kidmo.html#online-calculator",
+    "href": "slides_kidmo.html#online-calculator",
+    "title": "R for predicting kidney transplant success",
+    "section": "Online calculator",
+    "text": "Online calculator\nRuns on psot connec clouse Quarto website that implements app with iframe"
+  }
+]
