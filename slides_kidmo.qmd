@@ -374,3 +374,11 @@ Code in Quarto Website:
 :::
 
 ::::
+
+
+## Awesome tools
+
+- R and RStudio
+- Quarto Documents / Websites / Presentations / Dashboards
+- Posit Connect Cloud
+- GitHub / GitHub pages
