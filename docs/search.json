@@ -1,5 +1,12 @@
 [
   {
+    "objectID": "slides_kidmo.html#kidney-transplant",
+    "href": "slides_kidmo.html#kidney-transplant",
+    "title": "R for predicting kidney transplant success",
+    "section": "Kidney transplant",
+    "text": "Kidney transplant\n\nIt is challanging to make clinical predictions\nFrom development, validation to implementation\nMore an art than a science (to be honest)"
+  },
+  {
     "objectID": "slides_kidmo.html#study-objective",
     "href": "slides_kidmo.html#study-objective",
     "title": "R for predicting kidney transplant success",
@@ -137,7 +144,7 @@
     "href": "slides_kidmo.html#an-example-with-donor-age",
     "title": "R for predicting kidney transplant success",
     "section": "An example with donor age",
-    "text": "An example with donor age\nLet’s create 4 kidney recipients with varying kidney donor age, other factors being equal:\n\ndata = data[rep(1,4), ]\ndata$D_age = c(25, 45, 65, 85)\n\nstats = kidmo(newdata = data)\nstats$summary\n\n\n\n\n\nkidmo\nrank\n2-year risk\n5-year risk\n\n\n\n\n1.25\n65%\n0.0450961\n0.0859930\n\n\n1.46\n75%\n0.0527994\n0.1003058\n\n\n2.56\n94%\n0.0904031\n0.1685937\n\n\n6.22\n100%\n0.2058106\n0.3617473"
+    "text": "An example with donor age\nLet’s create 4 kidney recipients with varying donor age, other factors being equal:\n\ndata = data[rep(1,4), ]\ndata$D_age = c(25, 45, 65, 85)\n\nstats = kidmo(newdata = data)\nstats$summary\n\n\n\n\n\nkidmo\nrank\n2-year risk\n5-year risk\n\n\n\n\n1.25\n65%\n0.0450961\n0.0859930\n\n\n1.46\n75%\n0.0527994\n0.1003058\n\n\n2.56\n94%\n0.0904031\n0.1685937\n\n\n6.22\n100%\n0.2058106\n0.3617473"
   },
   {
     "objectID": "slides_kidmo.html#plots",

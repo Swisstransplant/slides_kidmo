@@ -20,6 +20,14 @@ format:
     auto-stretch: false
 ---
 
+## Kidney transplant
+
+* It is challanging to make clinical predictions
+* From development, validation to implementation
+* More an art than a science (to be honest)
+
+![](Kreis_Niere.png){width=30%}
+
 ## Study objective
 
 KIDMO is a **clinical prediction model** to estimate **graft loss** risk in deceased-donor kidney transplantation. It uses a combination of
@@ -44,7 +52,7 @@ Clinical prediction models play a vital role in advancing **personalized medicin
 
 ## Swiss transplant centers
 
-![](centers.png){width=90%}
+![](centers.png){width=70%}
 
 ## Methods
 
@@ -307,7 +315,7 @@ usethis::use_data(
 
 ## An example with donor age
 
-Let's create 4 kidney recipients with varying kidney donor age, other factors being equal:
+Let's create 4 kidney recipients with varying donor age, other factors being equal:
 
 ```{r}
 #| echo: true
