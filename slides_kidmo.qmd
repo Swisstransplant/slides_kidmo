@@ -232,7 +232,7 @@ The KIDMO risk score has been implemented in the Swisstransplant R package `swt`
 remotes::install_github("Swisstransplant/swt")
 ```
 
-![](hex-swt.png){width=90%}
+![](hex-swt.png){width=20%}
 
 
 ## `kidmo()` function
