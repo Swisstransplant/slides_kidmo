@@ -375,7 +375,6 @@ Code in Quarto Website:
 
 ::::
 
-
 ## Awesome tools
 
 - R and RStudio
